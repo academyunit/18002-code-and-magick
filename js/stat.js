@@ -45,10 +45,10 @@
    * @param {int} h
    * @param {string} color
    */
-  var renderRect = function (ctx, x, y, w, h, color) {
+  function renderRect(ctx, x, y, w, h, color) {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, w, h);
-  };
+  }
 
   /**
    *
@@ -57,11 +57,11 @@
    * @param {int} x
    * @param {int} y
    */
-  var renderText = function (ctx, text, x, y) {
+  function renderText(ctx, text, x, y) {
     ctx.fillStyle = 'black';
     ctx.font = '16px PT Mono';
     fillTextWordWrap(ctx, text, x, y);
-  };
+  }
 
   /**
    * Сгенерировать столбцы гистаграмы.
@@ -70,7 +70,7 @@
    * @param {int} times Массив с временем игроков
    * @param {int} names Массив с их именами
    */
-  var createStatsTables = function (ctx, times, names) {
+  function createStatsTables(ctx, times, names) {
     var step = HISTOGRAM_HEIGHT / getMaxPlayerScore(times);
 
     var initialX = CLOUD_BASE_X_COORDINATE + 70;
@@ -88,7 +88,7 @@
       ctx.fillText(names[j], currentCoordinateX, initialY + 20);
       ctx.fillText(parseInt(times[j], 10), currentCoordinateX, currentScoreTextCoordinateY);
     }
-  };
+  }
 
   /**
    * Написать текст методом fillText() canvas'a с автоматической поддержкой
@@ -100,7 +100,7 @@
    * @param {int} y
    * @param {int} maxWidth
    */
-  var fillTextWordWrap = function (ctx, text, x, y, maxWidth) {
+  function fillTextWordWrap(ctx, text, x, y, maxWidth) {
     var keywords = text.split('\n');
     var currentTextSize = parseInt(ctx.font, 10);
     var currentYShift = 0;
@@ -108,7 +108,7 @@
       ctx.fillText(keywords[i], x, y + currentYShift, maxWidth);
       currentYShift += currentTextSize;
     }
-  };
+  }
 
   /**
    * Найти максимальное кол-во очков среди всех игроков.
@@ -116,7 +116,7 @@
    * @param {int} times
    * @return {number}
    */
-  var getMaxPlayerScore = function (times) {
+  function getMaxPlayerScore(times) {
     var max = -1;
     for (var i = 0; i < times.length; i++) {
       var time = times[i];
@@ -125,7 +125,7 @@
       }
     }
     return max;
-  };
+  }
 
   /**
    * Сгенерировать прозрачность в формате rgba() для цвета rgbColor.
@@ -133,7 +133,7 @@
    * @param {string|array} rgbColor
    * @return {string}
    */
-  var getRgbaRandomTransparencyLevel = function (rgbColor) {
+  function getRgbaRandomTransparencyLevel(rgbColor) {
     if (rgbColor.constructor.name === 'Array') {
       rgbColor = rgbColor.join(', ');
     }
@@ -141,6 +141,5 @@
     randomNumber = randomNumber < 0.1 ? 0.1 : randomNumber.toFixed(1);
 
     return 'rgba(' + rgbColor + ', ' + randomNumber + ')';
-  };
-
+  }
 })();
