@@ -76,7 +76,7 @@ function getRandomSimilarWizardsData(amount) {
  * Перемешать массив.
  *
  * @param {array} arr
- * @returns {Array.<T>}
+ * @return {[]}
  */
 function shuffleArray(arr) {
   return arr.sort(function () {
@@ -174,8 +174,8 @@ function renderSimilarWizards(wizards) {
 /**
  * Toggle для DOM'a.
  *
- * @param selector
- * @param className
+ * @param {?} selector
+ * @param {string} className
  */
 function toggleBlock(selector, className) {
   document.querySelector(selector).classList.toggle(className);
