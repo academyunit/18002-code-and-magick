@@ -73,43 +73,55 @@ function getRandomSimilarWizardsData(amount) {
 }
 
 /**
+ * Перемешать массив.
+ *
+ * @param {array} arr
+ * @returns {Array.<T>}
+ */
+function shuffleArray(arr) {
+  return arr.sort(function () {
+    return 0.5 - Math.random();
+  });
+}
+
+/**
  * Получить случайные элементы массива(ов)
  *
  * @param {int} amountOfValues Кол-во элементов, которое нужно получить
- * @param {array} arr Массив 1
+ * @param {array} arr1 Массив 1
  * @param {array} arr2 Массив 2 (опционально)
  * @return {Array}
  */
-function getRandomUniqueValues(amountOfValues, arr, arr2) {
-  var usedValues = {};
-  var foundValues = [];
-  var currentValue = '';
-  // Максивальное кол-во попыток найти уникальное значение
-  var maxAttempts = 10;
-  var attempts = 0;
-  while (foundValues.length < amountOfValues) {
-    if (attempts >= maxAttempts) {
+function getRandomUniqueValues(amountOfValues, arr1, arr2) {
+  var copiedArr1 = shuffleArray(arr1.slice());
+  var copiedArr2 = arr2 ? shuffleArray(arr2.slice()) : [];
+
+  var results = [];
+  while (amountOfValues > results.length) {
+    if (!arr1.length || (arr1 && arr2) && (!arr1.length || !arr2.length)) {
       break;
     }
-    attempts++;
-    // Если пришло 2 массива, то генерим уникальное значение, используя оба сразу
-    if (arr && arr2) {
-      currentValue = getRandomBooleanValue()
-        ? getRandomArrayElement(arr) + ' ' + getRandomArrayElement(arr2)
-        : getRandomArrayElement(arr2) + ' ' + getRandomArrayElement(arr);
-    } else {
-    // или только один
-      currentValue = getRandomArrayElement(arr);
-    }
-    if (usedValues[currentValue]) {
-      continue;
-    }
-
-    foundValues.push(currentValue);
-    usedValues[currentValue] = true;
+    var valueToPush = (arr1 && arr2)
+      ? getRandomlyFlippedValues(copiedArr1, copiedArr2)
+      : copiedArr1.pop();
+    results.push(valueToPush);
   }
 
-  return foundValues;
+  return results;
+}
+
+/**
+ * В случайном порядке создавать значения из ключей arr1 + arr2 или arr2 + arr1.
+ *
+ * @param {array} copiedArr1
+ * @param {array} copiedArr2
+ * @return {string}
+ */
+function getRandomlyFlippedValues(copiedArr1, copiedArr2) {
+  if (getRandomBooleanValue()) {
+    return copiedArr1.pop() + ' ' + copiedArr2.pop();
+  }
+  return copiedArr2.pop() + ' ' + copiedArr1.pop();
 }
 
 /**
@@ -119,18 +131,6 @@ function getRandomUniqueValues(amountOfValues, arr, arr2) {
  */
 function getRandomBooleanValue() {
   return Math.random() >= 0.5;
-}
-
-/**
- * Получить случайный элемент массива.
- *
- * @param {array} arr
- * @return {string}
- */
-function getRandomArrayElement(arr) {
-  var randomIndex = Math.floor(Math.random() * arr.length);
-
-  return arr[randomIndex] ? arr[randomIndex] : '';
 }
 
 /**
@@ -172,12 +172,30 @@ function renderSimilarWizards(wizards) {
 }
 
 /**
- * Показать экран с похожими магами.
+ * Toggle для DOM'a.
+ *
+ * @param selector
+ * @param className
  */
-function showSimilarWizardsBlock() {
-  document.querySelector('.setup-similar').classList.remove('hidden');
+function toggleBlock(selector, className) {
+  document.querySelector(selector).classList.toggle(className);
 }
 
+/**
+ * Показать экран с похожими магами.
+ */
+function toggleSetupWizardScreen() {
+  toggleBlock('.overlay.setup', 'hidden');
+}
+
+/**
+ * Показать экран с похожими магами.
+ */
+function toggleSimilarWizardsScreen() {
+  toggleBlock('.setup-similar', 'hidden');
+}
+
+toggleSetupWizardScreen();
 var similarWizards = getGeneratedSimilarWizards(getRandomSimilarWizardsData(SIMILAR_WIZARDS_AMOUNT));
 renderSimilarWizards(similarWizards);
-showSimilarWizardsBlock();
+toggleSimilarWizardsScreen();
