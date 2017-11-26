@@ -52,7 +52,7 @@ var LIST_EYES_COLORS = [
  *  {name: "Люпита Ирвинг", coatColor: "rgb(146, 100, 161)", eyesColor: "blue"}
  * ]
  *
- * @param {int} amount
+ * @param {number} amount
  * @return {Array}
  */
 function getRandomSimilarWizardsData(amount) {
@@ -75,8 +75,8 @@ function getRandomSimilarWizardsData(amount) {
 /**
  * Перемешать массив.
  *
- * @param {array} arr
- * @return {[]}
+ * @param {Array} arr
+ * @return {Array}
  */
 function shuffleArray(arr) {
   return arr.sort(function () {
@@ -87,9 +87,9 @@ function shuffleArray(arr) {
 /**
  * Получить случайные элементы массива(ов)
  *
- * @param {int} amountOfValues Кол-во элементов, которое нужно получить
- * @param {array} arr1 Массив 1
- * @param {array} arr2 Массив 2 (опционально)
+ * @param {number} amountOfValues Кол-во элементов, которое нужно получить
+ * @param {Array} arr1 Массив 1
+ * @param {Array} arr2 Массив 2 (опционально)
  * @return {Array}
  */
 function getRandomUniqueValues(amountOfValues, arr1, arr2) {
@@ -113,8 +113,8 @@ function getRandomUniqueValues(amountOfValues, arr1, arr2) {
 /**
  * В случайном порядке создавать значения из ключей arr1 + arr2 или arr2 + arr1.
  *
- * @param {array} copiedArr1
- * @param {array} copiedArr2
+ * @param {Array} copiedArr1
+ * @param {Array} copiedArr2
  * @return {string}
  */
 function getRandomlyFlippedValues(copiedArr1, copiedArr2) {
@@ -136,8 +136,8 @@ function getRandomBooleanValue() {
 /**
  * Сгенерировать магов (DOM для каждого мага на основе template'a).
  *
- * @param {array} data
- * @return {array}
+ * @param {Array} data
+ * @return {Array}
  */
 function getGeneratedSimilarWizards(data) {
   var elements = [];
@@ -160,7 +160,7 @@ function getGeneratedSimilarWizards(data) {
 /**
  * Отрендерить магов на экране (включить магов в DOM).
  *
- * @param {array} wizards
+ * @param {Array} wizards
  */
 function renderSimilarWizards(wizards) {
   var wizardsList = document.querySelector('.setup-similar-list');
