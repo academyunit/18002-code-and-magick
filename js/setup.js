@@ -93,15 +93,18 @@ function shuffleArray(arr) {
  * @return {Array}
  */
 function getRandomUniqueValues(amountOfValues, arr1, arr2) {
+  if (!arr1) {
+    return [];
+  }
   var copiedArr1 = shuffleArray(arr1.slice());
   var copiedArr2 = arr2 ? shuffleArray(arr2.slice()) : [];
 
   var results = [];
   while (amountOfValues > results.length) {
-    if (!arr1.length || (arr1 && arr2) && (!arr1.length || !arr2.length)) {
+    if (!copiedArr1.length || arr2 && (!copiedArr1.length || !copiedArr2.length)) {
       break;
     }
-    var valueToPush = (arr1 && arr2)
+    var valueToPush = (copiedArr1 && arr2)
       ? getRandomlyFlippedValues(copiedArr1, copiedArr2)
       : copiedArr1.pop();
     results.push(valueToPush);
@@ -174,7 +177,7 @@ function renderSimilarWizards(wizards) {
 /**
  * Toggle для DOM'a.
  *
- * @param {?} selector
+ * @param {string} selector
  * @param {string} className
  */
 function toggleBlock(selector, className) {
@@ -189,7 +192,7 @@ function toggleSetupWizardScreen() {
 }
 
 /**
- * Показать экран с похожими магами.
+ * Открыть/закрыть блок с похожими магами.
  */
 function toggleSimilarWizardsScreen() {
   toggleBlock('.setup-similar', 'hidden');
