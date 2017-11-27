@@ -104,7 +104,7 @@ function getRandomUniqueValues(amountOfValues, arr1, arr2) {
     if (!copiedArr1.length || arr2 && (!copiedArr1.length || !copiedArr2.length)) {
       break;
     }
-    var valueToPush = (copiedArr1 && arr2)
+    var valueToPush = arr2
       ? getRandomlyFlippedValues(copiedArr1, copiedArr2)
       : copiedArr1.pop();
     results.push(valueToPush);
