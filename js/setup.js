@@ -48,11 +48,11 @@ var LIST_EYES_COLORS = [
 ];
 
 var LIST_FIREBALLS_COLORS = [
-    '#ee4830',
-    '#30a8ee',
-    '#5ce6c0',
-    '#e848d5',
-    '#e6e848'
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
 ];
 
 /**
@@ -62,7 +62,7 @@ var LIST_FIREBALLS_COLORS = [
  * @return {string}
  */
 function getRandomArrayElement(arr) {
-    return arr[getRandomArrayIndex(arr)];
+  return arr[getRandomArrayIndex(arr)];
 }
 
 /**
@@ -72,7 +72,7 @@ function getRandomArrayElement(arr) {
  * @return {number}
  */
 function getRandomArrayIndex(arr) {
-    return Math.floor(Math.random() * arr.length);
+  return Math.floor(Math.random() * arr.length);
 }
 
 /**
@@ -227,23 +227,23 @@ function toggleSimilarWizardsScreen() {
  * Инициализация интерфейса конфигурации игрока.
  */
 function initInterface() {
-    var setupScreen = document.querySelector('.setup');
-    if (!setupScreen) {
-        console.log('[Error] Configuration screen is not found!');
-        return;
-    }
+  var setupScreen = document.querySelector('.setup');
+  if (!setupScreen) {
+    // console.log('[Error] Configuration screen is not found!');
+    return;
+  }
 
-    /**
-     * @todo: постарался разбить тут логически функционал.
-     * Как лучше сделать можно и как вообще лучше разбивать большую логику в подобных случаях?
-     */
+  /**
+   * @todo: постарался разбить тут логически функционал.
+   * Как лучше сделать можно и как вообще лучше разбивать большую логику в подобных случаях?
+   */
 
-    // Event handler'ы для окна конфигурации
-    initScreenHandlers(setupScreen);
-    // Валидация input'ов из окна конфигурации
-    initScreenValidators(setupScreen);
-    // Смена цвета у частей character'a
-    initScreenColorChangeHandlers(setupScreen);
+  // Event handler'ы для окна конфигурации
+  initScreenHandlers(setupScreen);
+  // Валидация input'ов из окна конфигурации
+  initScreenValidators(setupScreen);
+  // Смена цвета у частей character'a
+  initScreenColorChangeHandlers(setupScreen);
 }
 
 /**
@@ -252,55 +252,55 @@ function initInterface() {
  * @param {Element} setupScreen
  */
 function initScreenHandlers(setupScreen) {
-    var setupOpen = document.querySelector('.setup-open');
-    if (!setupOpen) {
-        console.log('[Error] open button is not found!');
-        return;
+  var setupOpen = document.querySelector('.setup-open');
+  if (!setupOpen) {
+    // console.log('[Error] open button is not found!');
+    return;
+  }
+
+  var setupClose = setupScreen.querySelector('.setup-close');
+  if (!setupClose) {
+    // console.log('[Error] Close button on the configuration screen is not found!');
+    return;
+  }
+
+  // @todo: это ок, что вот эти парни тут тусуются? :)
+
+  function openPopUp() {
+    setupScreen.classList.remove('hidden');
+    document.addEventListener('keydown', onPopUpEscPress);
+  }
+
+  function closePopUp() {
+    setupScreen.classList.add('hidden');
+    document.removeEventListener('keydown', onPopUpEscPress);
+  }
+
+  function onPopUpEscPress(e) {
+    if (e.keyCode === KEYBOARD_ESC_KEYCODE) {
+      closePopUp();
     }
+  }
 
-    var setupClose = setupScreen.querySelector('.setup-close');
-    if (!setupClose) {
-        console.log('[Error] Close button on the configuration screen is not found!');
-        return;
+  setupOpen.addEventListener('click', function () {
+    openPopUp();
+  });
+
+  setupOpen.addEventListener('keydown', function (e) {
+    if (e.keyCode === KEYBOARD_ENTER_KEYCODE) {
+      openPopUp();
     }
+  });
 
-    // @todo: это ок, что вот эти парни тут тусуются? :)
+  setupClose.addEventListener('click', function () {
+    closePopUp();
+  });
 
-    function openPopUp() {
-        setupScreen.classList.remove('hidden');
-        document.addEventListener('keydown', onPopUpEscPress);
+  setupClose.addEventListener('keydown', function (e) {
+    if (e.keyCode === KEYBOARD_ENTER_KEYCODE) {
+      closePopUp();
     }
-
-    function closePopUp() {
-        setupScreen.classList.add('hidden');
-        document.removeEventListener('keydown', onPopUpEscPress);
-    }
-
-    function onPopUpEscPress(e) {
-        if (e.keyCode == KEYBOARD_ESC_KEYCODE) {
-            closePopUp();
-        }
-    }
-
-    setupOpen.addEventListener('click', function(e) {
-        openPopUp()
-    });
-
-    setupOpen.addEventListener('keydown', function(e) {
-        if (e.keyCode == KEYBOARD_ENTER_KEYCODE) {
-            openPopUp();
-        }
-    });
-
-    setupClose.addEventListener('click', function(e) {
-        closePopUp();
-    });
-
-    setupClose.addEventListener('keydown', function(e) {
-        if (e.keyCode == KEYBOARD_ENTER_KEYCODE) {
-            closePopUp();
-        }
-    });
+  });
 }
 
 /**
@@ -309,33 +309,33 @@ function initScreenHandlers(setupScreen) {
  * @param {Element} setupScreen
  */
 function initScreenValidators(setupScreen) {
-    var userName = setupScreen.querySelector('.setup-user-name');
+  var userName = setupScreen.querySelector('.setup-user-name');
 
-    if (!userName) {
-      console.log('[Error] No user name input field found!');
-      return;
+  if (!userName) {
+    // console.log('[Error] No user name input field found!');
+    return;
+  }
+
+  // Проверка через стандартные HTML5 minlength + maxlength (+ element.validity на стороне JS)
+  userName.addEventListener('invalid', function () {
+    // @todo: Сюда тоже почему-то не приходит ничего, будто этот event не диспатчится совсем. Почему?
+
+    // Обработать через element.validity...
+  });
+
+  // Обычная проверка JS (почему, кстати тут событие - input, а не change ?)
+  userName.addEventListener('input', function (e) {
+    var target = e.target;
+
+    /* @todo: В Chrome не работает - внешне никаких изменений не видно :( */
+    if (target.value.length < 2) {
+      e.target.setCustomValidity('Имя персонажа не может содержать менее 2 символов');
+    } else if (target.value.length > 25) {
+      e.target.setCustomValidity('Максимальная длина имени персонажа — 25 символов');
+    } else {
+      e.target.setCustomValidity('');
     }
-
-    // Проверка через стандартные HTML5 minlength + maxlength (+ element.validity на стороне JS)
-    userName.addEventListener('invalid',  function (e) {
-        // @todo: Сюда тоже почему-то не приходит ничего, будто этот event не диспатчится совсем. Почему?
-
-        // Обработать через element.validity...
-    });
-
-    // Обычная проверка JS (почему, кстати тут событие - input, а не change ?)
-    userName.addEventListener('input', function(e) {
-        var target = e.target;
-
-      /* @todo: В Chrome не работает - внешне никаких изменений не видно :( */
-        if (target.value.length < 2) {
-            e.target.setCustomValidity('Имя персонажа не может содержать менее 2 символов');
-        } else if (target.value.length > 25) {
-            e.target.setCustomValidity('Максимальная длина имени персонажа — 25 символов');
-        } else {
-            e.target.setCustomValidity('');
-        }
-    });
+  });
 }
 
 /**
@@ -344,27 +344,25 @@ function initScreenValidators(setupScreen) {
  * @param {Element} setupScreen
  */
 function initScreenColorChangeHandlers(setupScreen) {
-    var wizardCoat = setupScreen.querySelector('.setup-wizard .wizard-coat');
-    var wizardEyes = setupScreen.querySelector('.setup-wizard .wizard-eyes');
-    var wizardFireball = setupScreen.querySelector('.setup-fireball-wrap');
+  var wizardCoat = setupScreen.querySelector('.setup-wizard .wizard-coat');
+  var wizardEyes = setupScreen.querySelector('.setup-wizard .wizard-eyes');
+  var wizardFireball = setupScreen.querySelector('.setup-fireball-wrap');
 
-    console.log('wizardFireball', wizardFireball);
+  if (!wizardCoat || !wizardEyes || !wizardFireball) {
+    // console.log('[Error] One or more of the character\'s body parts cannot be found!');
+    return;
+  }
 
-    if (!wizardCoat || !wizardEyes || !wizardFireball) {
-        console.log('[Error] One or more of the character\'s body parts cannot be found!');
-        return;
+  wizardCoat.addEventListener('click', setRandomColor(LIST_COATS_COLORS));
+  wizardEyes.addEventListener('click', setRandomColor(LIST_EYES_COLORS));
+  wizardFireball.addEventListener('click', function (e) {
+    // Фикс для выбора именно .setup-fireball-wrap класса, потому что пользователь обычно кликает на .setup-fireball
+    var target = e.target;
+    if (e.target.classList.contains('setup-fireball')) {
+      target = e.target.parentNode;
     }
-
-    wizardCoat.addEventListener('click', setRandomColor(LIST_COATS_COLORS));
-    wizardEyes.addEventListener('click', setRandomColor(LIST_EYES_COLORS));
-    wizardFireball.addEventListener('click', function(e) {
-        // Фикс для выбора именно .setup-fireball-wrap класса, потому что пользователь обычно кликает на .setup-fireball
-        var target = e.target;
-        if (e.target.classList.contains('setup-fireball')) {
-            target = e.target.parentNode;
-        }
-        setRandomColor(LIST_FIREBALLS_COLORS, true)(target);
-    });
+    setRandomColor(LIST_FIREBALLS_COLORS, true)(target);
+  });
 }
 
 // @todo: имеет ли смысл эти 3 функции снизу убрать внуть initScreenColorChangeHandlers() ?
@@ -377,17 +375,17 @@ function initScreenColorChangeHandlers(setupScreen) {
  * @return {Function}
  */
 function setRandomColor(colorsList, isSvgElement) {
-    isSvgElement = (typeof isSvgElement === 'undefined');
+  isSvgElement = (typeof isSvgElement === 'undefined');
 
-    return function(e) {
-        // Если у текущего элеиента нет таргета, то берем его самого за таргет
-        var element = e.target || e;
-        if (isSvgElement) {
-            changeSvgFillColor(element, getRandomArrayElement(colorsList));
-        } else {
-            changeBackgroundColor(element, getRandomArrayElement(colorsList));
-        }
+  return function (e) {
+    // Если у текущего элеиента нет таргета, то берем его самого за таргет
+    var element = e.target || e;
+    if (isSvgElement) {
+      changeSvgFillColor(element, getRandomArrayElement(colorsList));
+    } else {
+      changeBackgroundColor(element, getRandomArrayElement(colorsList));
     }
+  };
 }
 
 /**
@@ -397,17 +395,17 @@ function setRandomColor(colorsList, isSvgElement) {
  * @param {string }color
  */
 function changeBackgroundColor(element, color) {
-    element.style.backgroundColor = color;
+  element.style.backgroundColor = color;
 }
 
 /**
  * Изменить цвет SVG элемента.
  *
- * @param svgElement
- * @param color
+ * @param {Element} svgElement
+ * @param {string} color
  */
 function changeSvgFillColor(svgElement, color) {
-    svgElement.style.fill = color;
+  svgElement.style.fill = color;
 }
 
 var similarWizards = getGeneratedSimilarWizards(getRandomSimilarWizardsData(SIMILAR_WIZARDS_AMOUNT));
