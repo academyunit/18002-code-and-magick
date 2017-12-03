@@ -229,20 +229,11 @@ function toggleSimilarWizardsScreen() {
 function initInterface() {
   var setupScreen = document.querySelector('.setup');
   if (!setupScreen) {
-    // console.log('[Error] Configuration screen is not found!');
     return;
   }
 
-  /**
-   * @todo: постарался разбить тут логически функционал.
-   * Как лучше сделать можно и как вообще лучше разбивать большую логику в подобных случаях?
-   */
-
-  // Event handler'ы для окна конфигурации
   initScreenHandlers(setupScreen);
-  // Валидация input'ов из окна конфигурации
   initScreenValidators(setupScreen);
-  // Смена цвета у частей character'a
   initScreenColorChangeHandlers(setupScreen);
 }
 
@@ -254,17 +245,13 @@ function initInterface() {
 function initScreenHandlers(setupScreen) {
   var setupOpen = document.querySelector('.setup-open');
   if (!setupOpen) {
-    // console.log('[Error] open button is not found!');
     return;
   }
 
   var setupClose = setupScreen.querySelector('.setup-close');
   if (!setupClose) {
-    // console.log('[Error] Close button on the configuration screen is not found!');
     return;
   }
-
-  // @todo: это ок, что вот эти парни тут тусуются? :)
 
   function openPopUp() {
     setupScreen.classList.remove('hidden');
@@ -310,9 +297,7 @@ function initScreenHandlers(setupScreen) {
  */
 function initScreenValidators(setupScreen) {
   var userName = setupScreen.querySelector('.setup-user-name');
-
   if (!userName) {
-    // console.log('[Error] No user name input field found!');
     return;
   }
 
@@ -323,7 +308,6 @@ function initScreenValidators(setupScreen) {
     // Обработать через element.validity...
   });
 
-  // Обычная проверка JS (почему, кстати тут событие - input, а не change ?)
   userName.addEventListener('input', function (e) {
     var target = e.target;
 
@@ -349,63 +333,52 @@ function initScreenColorChangeHandlers(setupScreen) {
   var wizardFireball = setupScreen.querySelector('.setup-fireball-wrap');
 
   if (!wizardCoat || !wizardEyes || !wizardFireball) {
-    // console.log('[Error] One or more of the character\'s body parts cannot be found!');
     return;
   }
 
   wizardCoat.addEventListener('click', setRandomColor(LIST_COATS_COLORS));
   wizardEyes.addEventListener('click', setRandomColor(LIST_EYES_COLORS));
-  wizardFireball.addEventListener('click', function (e) {
-    // Фикс для выбора именно .setup-fireball-wrap класса, потому что пользователь обычно кликает на .setup-fireball
-    var target = e.target;
-    if (e.target.classList.contains('setup-fireball')) {
-      target = e.target.parentNode;
-    }
-    setRandomColor(LIST_FIREBALLS_COLORS, true)(target);
-  });
-}
+  wizardFireball.addEventListener('click', setRandomColor(LIST_FIREBALLS_COLORS, false));
 
-// @todo: имеет ли смысл эти 3 функции снизу убрать внуть initScreenColorChangeHandlers() ?
+  /**
+   * Установить элементу рандомный цвет из переданного списка цветов.
+   *
+   * @param {Array} colorsList
+   * @param {boolean} isSvgElement
+   * @return {Function}
+   */
+  function setRandomColor(colorsList, isSvgElement) {
+    return function (e) {
+      isSvgElement = (typeof isSvgElement === 'undefined') ? true : isSvgElement;
+      // Если у текущего элеиента нет таргета, то берем его самого за таргет
+      var element = e.target || e;
+      if (isSvgElement) {
+        changeSvgFillColor(element, getRandomArrayElement(colorsList));
+      } else {
+        changeBackgroundColor(element, getRandomArrayElement(colorsList));
+      }
+    };
+  }
 
-/**
- * Установить элементу рандомный цвет из переданного списка цветов.
- *
- * @param {Array} colorsList
- * @param {boolean} isSvgElement
- * @return {Function}
- */
-function setRandomColor(colorsList, isSvgElement) {
-  isSvgElement = (typeof isSvgElement === 'undefined');
+  /**
+   * Изменить background у элемента.
+   *
+   * @param {Element} element
+   * @param {string }color
+   */
+  function changeBackgroundColor(element, color) {
+    element.style.backgroundColor = color;
+  }
 
-  return function (e) {
-    // Если у текущего элеиента нет таргета, то берем его самого за таргет
-    var element = e.target || e;
-    if (isSvgElement) {
-      changeSvgFillColor(element, getRandomArrayElement(colorsList));
-    } else {
-      changeBackgroundColor(element, getRandomArrayElement(colorsList));
-    }
-  };
-}
-
-/**
- * Изменить background у элемента.
- *
- * @param {Element} element
- * @param {string }color
- */
-function changeBackgroundColor(element, color) {
-  element.style.backgroundColor = color;
-}
-
-/**
- * Изменить цвет SVG элемента.
- *
- * @param {Element} svgElement
- * @param {string} color
- */
-function changeSvgFillColor(svgElement, color) {
-  svgElement.style.fill = color;
+  /**
+   * Изменить цвет SVG элемента.
+   *
+   * @param {Element} svgElement
+   * @param {string} color
+   */
+  function changeSvgFillColor(svgElement, color) {
+    svgElement.style.fill = color;
+  }
 }
 
 var similarWizards = getGeneratedSimilarWizards(getRandomSimilarWizardsData(SIMILAR_WIZARDS_AMOUNT));
