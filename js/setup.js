@@ -301,23 +301,13 @@ function initScreenValidators(setupScreen) {
     return;
   }
 
-  // Проверка через стандартные HTML5 minlength + maxlength (+ element.validity на стороне JS)
-  userName.addEventListener('invalid', function () {
-    // @todo: Сюда тоже почему-то не приходит ничего, будто этот event не диспатчится совсем. Почему?
-
-    // Обработать через element.validity...
-  });
-
-  userName.addEventListener('input', function (e) {
-    var target = e.target;
-
-    /* @todo: В Chrome не работает - внешне никаких изменений не видно :( */
-    if (target.value.length < 2) {
-      e.target.setCustomValidity('Имя персонажа не может содержать менее 2 символов');
-    } else if (target.value.length > 25) {
-      e.target.setCustomValidity('Максимальная длина имени персонажа — 25 символов');
-    } else {
-      e.target.setCustomValidity('');
+  userName.addEventListener('input', function () {
+    userName.setCustomValidity('');
+    if (userName.validity.tooShort) {
+      userName.setCustomValidity('Имя персонажа не может содержать менее 2 символов');
+    }
+    if (userName.validity.tooLong) {
+      userName.setCustomValidity('Максимальная длина имени персонажа — 25 символов');
     }
   });
 }
